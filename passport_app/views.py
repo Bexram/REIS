@@ -747,7 +747,7 @@ class SearchView(FormView):
             
             owner = Owner()
 
-            match = re.search("\d{12}", form['owner'].value())
+            match = re.search("\d{12}", str(form['owner'].value()))
             if not match:
                 owner.name = form['owner'].value()
             else:

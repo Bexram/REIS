@@ -69,19 +69,24 @@ def init_type_of_value():
     params = [
         {
             'name': 'integer',
+            'name_ru': 'целое число'
         },
 
         {
             'name': 'float',
+            'name_ru': 'дробное число'
         },
         {
             'name': 'text',
+            'name_ru': 'текст'
         },
         {
             'name': 'date',
+            'name_ru': 'дата'
         },
         {
             'name': 'datetime',
+            'name_ru': 'дата и время'
         },
     ]
 
@@ -145,13 +150,9 @@ def init_social_fields():
             'title': 'library',
             'title_rus': "Читальный зал Билиблиотека Книги",
         },
+
         {
             'name': 'shop',
-            'title': 'college',
-            'title_rus': "Высшее учебное заведение",
-        },
-        {
-            'name': 'college',
             'title': 'shop',
             'title_rus': "Магазин",
         },
@@ -190,11 +191,7 @@ def init_social_fields():
             'title': 'mall',
             'title_rus': "Торговый центр",
         },
-        {
-            'name': 'college',
-            'title': 'college',
-            'title_rus': "Высшее учебное заведение",
-        },
+
         {
             'name': 'pharmacy',
             'title': 'pharmacy',
@@ -1493,19 +1490,19 @@ def create_parser_parameters():
             parserparameter = ParserParameter()
             parserparameter.name = item.name      
                               
-            parserparameter.name_ru = item.title_rus  
-            parserparameter.parser_type = ParserType.objects.get(id = item.parser_type)
+            parserparameter.name_ru = item.title_rus
+            parserparameter.parser_type = ParserType.objects.get(id = item.parser_type+1)
             parserparameter.save()
 
             field_data = DataField.objects.filter(field = item)
             for field_data_item in field_data:
                 print ("try save data parametter")
                 data_parameter = ParserParameterData()
-                data_parameter.value = field_data_item.value                        
+                data_parameter.value = field_data_item.value
                 data_parameter.real_estate = field_data_item.real_estate
-                data_parameter.parser_parameter = parserparameter                
+                data_parameter.parser_parameter = parserparameter
                 data_parameter.save()
-                print ("save data parametter")
+                print ("save data parameter")
 
         except Exception as e:
             print(str(e))
@@ -1520,9 +1517,9 @@ def create_formula():
             print ("try save data category formula")    
             category_formula = FormulaCategory() 
             category_formula.category = category
-            category_formula.value_label = "FV_%i" % (category.id,)
-            category_formula.rate_label = "FR_%i" % (category.id,)
-            category_formula.formula_lbl = "FF_%i" % (category.id,)
+            category_formula.value = "FV_%i" % (category.id,)
+            category_formula.rate = "FR_%i" % (category.id,)
+            category_formula.formula = "FF_%i" % (category.id,)
             category_formula.save()
             print ("save data category formula")
             print (category.parameters)
@@ -1542,7 +1539,7 @@ def create_formula():
 
         except Exception as e:
             print(str(e))
-            pass
+            break
     print("finished")
 
 def create_default_search_form():
@@ -1578,8 +1575,8 @@ def create_yandex_parameter():
     parser_type_yandex = ParserType.objects.filter(name = "yandex_map").first()
     parser_parameters = ParserParameter.objects.filter(parser_type = parser_type)
     print("create_yandex_parameter")
-    print(parser_type.name)
-    print(parser_type_yandex.name)
+    #print(parser_type.name)
+    #print(parser_type_yandex.name)
 
     for item in parser_parameters:
         parserparameter = ParserParameter()
@@ -1594,14 +1591,14 @@ def tasks():
     # init_classifier()
     # init_addreses()
     # init_units()
-
+    #
     # init_type_of_value()
     # init_social_fields()
     # init_transport_fields()
     # init_place_info_fields()
     # init_architecture_fields()
     # init_rights_fields()
-
+    #
     # init_engsys_fields()
     # create_config()
     # move_data_to_category()
@@ -1611,8 +1608,8 @@ def tasks():
     # init_db()
     # create_default_search_form()
     create_yandex_parameter()
-    # create_gkh_parameter()
+    # #create_gkh_parameter()
 
     print("finish tasks")
 
-# init_classifier()
+

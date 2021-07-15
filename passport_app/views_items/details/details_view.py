@@ -167,7 +167,7 @@ class DetailsView(LoginRequiredMixin, PermissionRequiredMixin, View):
             categories = []
             pk = int(request.GET.get('id'))
             real_property = get_object_or_404(RealEstate, id=pk)
-
+            print(real_property.search_form)
             if real_property.search_form and real_property.search_form.categories:
                 categories = real_property.search_form.categories.filter(
                     parent_categories=None)
@@ -176,7 +176,6 @@ class DetailsView(LoginRequiredMixin, PermissionRequiredMixin, View):
                 categories = search_form.categories.filter(parent_categories=None)
 
             cat_data = self.get_form_category_data(categories, real_property)
-
             self.calc_rating(cat_data)
 
             general_formula = FormulaCategory()
