@@ -7,29 +7,44 @@ from django.urls import reverse
 class Country(models.Model):
     name = models.CharField(max_length=255, default='')
 
+    def __str__(self):
+        return self.name
+
 class Region(models.Model):
     name = models.CharField(max_length=255, default='')
     country = models.ForeignKey(Country, on_delete=models.CASCADE, blank=True, null=True)
+    def __str__(self):
+        return self.name
 
 class District(models.Model):
     name = models.CharField(max_length=255, default='')
     region = models.ForeignKey(Region, on_delete=models.CASCADE, blank=True, null=True)
+    def __str__(self):
+        return self.name
 
 class TypeOfLocality(models.Model):
     name = models.CharField(max_length=255, default='')
+    def __str__(self):
+        return self.name
 
 class Locality(models.Model):
     name = models.CharField(max_length=255, default='')
     district = models.ForeignKey(District, on_delete=models.CASCADE, blank=True, null=True)
     type_of_locality = models.ForeignKey(TypeOfLocality, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
 
 class TypeOfStreet(models.Model):
     name = models.CharField(max_length=255, default='')
+    def __str__(self):
+        return self.name
 
 class Street(models.Model):
     name = models.CharField(max_length=255, default='')
     locality = models.ForeignKey(Locality, on_delete=models.CASCADE, blank=True, null=True)
     type_of_street = models.ForeignKey(TypeOfLocality, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
 
 ##===============================================
 class Classifier(models.Model):
@@ -37,12 +52,16 @@ class Classifier(models.Model):
     point = models.CharField(max_length=10, default='')
     descr = models.CharField(max_length=255, default='')
     name_ru = models.CharField(max_length=255, default='')
+    def __str__(self):
+        return self.name
 
 class TypeOfValue(models.Model):
     name = models.CharField(max_length=255, unique = True, default='')
     name_ru = models.CharField(max_length=255, unique = True, default='')
     def get_absolute_url(self):
         return "/constructor" #reverse('constructor', kwargs={'pk': self.pk})
+    def __str__(self):
+        return self.name
 
 class Unit(models.Model):
     name = models.CharField(max_length=255, unique = True, default='')
@@ -50,6 +69,8 @@ class Unit(models.Model):
     value_type = models.ForeignKey(TypeOfValue, on_delete=models.CASCADE)
     def get_absolute_url(self):
         return "/constructor" #reverse('constructor', kwargs={'pk': self.pk})
+    def __str__(self):
+        return self.name
 
 
 
@@ -60,29 +81,39 @@ class Owner(models.Model):
     inn = models.CharField(max_length=255)
     patronymic = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name
 
 class TypeOfRealEstate(models.Model):
     name = models.CharField(max_length=255, default = '')
     title_rus = models.CharField(max_length=255, default = '')
     title = models.CharField(max_length=255, default = '')
+    def __str__(self):
+        return self.name
 
 class SubtypeOfRealEstate(models.Model):
     name = models.CharField(max_length=255, default = '')
     title_rus = models.CharField(max_length=255, default = '')
     title = models.CharField(max_length=255, default = '')
     type = models.ForeignKey(TypeOfRealEstate, related_name='type', on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
 
 class SubsubtypeOfRealEstate(models.Model):
     name = models.CharField(max_length=255, default = '')
     title_rus = models.CharField(max_length=255, default = '')
     title = models.CharField(max_length=255, default = '')
     subtype = models.ForeignKey(SubtypeOfRealEstate, related_name='subtype', on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
 
 class SubsubsubtypeOfRealEstate(models.Model):
     name = models.CharField(max_length=255, default = '')
     title_rus = models.CharField(max_length=255, default = '')
     title = models.CharField(max_length=255, default = '')
     subsubtype = models.ForeignKey(SubsubtypeOfRealEstate, related_name='subsubtype', on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
 
 
 class GroupVisit(models.Model):
@@ -104,6 +135,8 @@ class Field(models.Model):
     type_of_value = models.ForeignKey(TypeOfValue, on_delete=models.CASCADE, blank=True, null=True)
     point = models.CharField(max_length=20, default='')
     parser_type = models.IntegerField(default=0)
+    def __str__(self):
+        return self.name
 
 class UserUser(models.Model):
     creator_user = models.ForeignKey(User, related_name='creator', on_delete=models.CASCADE)
@@ -125,6 +158,8 @@ class Priority(models.Model):
     name = models.CharField(max_length=255, default='', unique=True)
     name_ru = models.CharField(max_length=255, default='', unique=True)
     value = models.IntegerField(default=0)
+    def __str__(self):
+        return self.name
 
 class ParserType(models.Model):
     name = models.CharField(max_length=255, default='', unique=True)
@@ -137,6 +172,8 @@ class ParserType(models.Model):
     priority = models.ForeignKey(Priority, on_delete = models.SET_NULL, blank=True, null=True)
     def get_absolute_url(self):
         return "/constructor" #reverse('constructor', kwargs={'pk': self.pk})
+    def __str__(self):
+        return self.name
     
 class ParserParameter(models.Model):
     name = models.CharField(max_length=255, default='', unique=True)
@@ -145,6 +182,8 @@ class ParserParameter(models.Model):
     parser_parameter_type = models.CharField(max_length=255, default='')
     def get_absolute_url(self):
         return "/constructor" #reverse('constructor', kwargs={'pk': self.pk})
+    def __str__(self):
+        return self.name
 
 class Parameter(models.Model):
     name = models.CharField(max_length=255, default='', unique=True)    
@@ -155,6 +194,8 @@ class Parameter(models.Model):
     is_comment = models.BooleanField(default=False, blank=True)
     def get_absolute_url(self):
         return "/constructor" #reverse('constructor', kwargs={'pk': self.pk})
+    def __str__(self):
+        return self.name
 
 class Category(models.Model):
     name = models.CharField(max_length=1024, default='')#, unique=True)
@@ -164,10 +205,11 @@ class Category(models.Model):
     categories = models.ManyToManyField("self", related_name='childs', symmetrical=False, blank=True, null=True)
     parameters = models.ManyToManyField(Parameter, blank=True, null=True)
     parent_categories = models.ManyToManyField("self", related_name='parent', symmetrical=False, blank=True, null=True)
-    # parent_category = models.ForeignKey("passport_app.Category", on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     def get_absolute_url(self):
         return "/constructor" #reverse('category-detail', kwargs={'pk': self.id})
+    def __str__(self):
+        return self.name
 
 class SearchForm(models.Model):
     config = models.TextField(default="")
@@ -182,6 +224,8 @@ class SearchForm(models.Model):
     
     def get_absolute_url(self):
         return "/constructor"
+    def __str__(self):
+        return self.name
 
 class RealEstate(models.Model):
     id = models.AutoField(db_column='id', primary_key=True)
@@ -222,12 +266,14 @@ class DataField(models.Model):
     field = models.ForeignKey(Field, related_name='field', on_delete=models.CASCADE)
 
 
+
 class ParameterData(models.Model):    
     value = models.TextField(default="")
     rate = models.FloatField(default=0.0)
     comment = models.CharField(max_length=255, default='')
     real_estate = models.ForeignKey(RealEstate, on_delete=models.CASCADE)
     parameter = models.ForeignKey(Parameter, on_delete=models.CASCADE)
+
 
 class ParserParameterData(models.Model):    
     value = models.TextField(default="")

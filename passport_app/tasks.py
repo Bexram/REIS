@@ -1606,8 +1606,8 @@ def tasks():
     # create_parser_parameters()
     # create_formula()
     # init_db()
-    # create_default_search_form()
-    create_yandex_parameter()
+    create_default_search_form()
+    # create_yandex_parameter()
     # #create_gkh_parameter()
 
     print("finish tasks")

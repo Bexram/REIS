@@ -118,8 +118,8 @@ class DetailsView(LoginRequiredMixin, PermissionRequiredMixin, View):
         data = []
         try:
             if categories.exists():
-                for cat in categories.extra(select={'int_point': "CAST(replace(point, '.', '') AS INTEGER)"}). \
-                    order_by('int_point').all():
+                #for cat in categories.extra(select={'int_point': "CAST(replace(point, '.', '') AS INTEGER)"}). order_by('int_point').all():
+                for cat in categories.all():
                     if real_estate.search_form:
                         if cat not in real_estate.search_form.categories.all():
                             continue
@@ -161,20 +161,22 @@ class DetailsView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
     def get(self, request):
         total_rate = None
+        cat_data=None
         try:
             error = ''
             contains = []
             categories = []
             pk = int(request.GET.get('id'))
-            real_property = get_object_or_404(RealEstate, id=pk)
+            real_property = get_object_or_404(RealEstate, id=pk) #получение сформированного отчета
             print(real_property.search_form)
-            if real_property.search_form and real_property.search_form.categories:
+            if real_property.search_form and real_property.search_form.categories: #если есть привязанная форма отчета, то получаем ее категории
                 categories = real_property.search_form.categories.filter(
                     parent_categories=None)
+
             else:
                 search_form = SearchForm.objects.get(name='default')
                 categories = search_form.categories.filter(parent_categories=None)
-
+                print(categories)
             cat_data = self.get_form_category_data(categories, real_property)
             self.calc_rating(cat_data)
 
@@ -196,7 +198,6 @@ class DetailsView(LoginRequiredMixin, PermissionRequiredMixin, View):
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             print(str(e))
             print(exc_type, fname, exc_tb.tb_lineno)
-            
         return render(request, self.template_name, {
             'title': 'Отчёт R.E.I.S: ' + real_property.address,
             'total_rate': total_rate,
